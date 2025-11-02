@@ -16,7 +16,7 @@ class ChatRequest(BaseModel):
     # messages in OpenAI chat format: [{"role": "user", "content": "..."}, ...]
     messages: List[Dict[str, Any]]
     # Optional system-level instructions to be prepended to the messages list
-    instructions: Optional[str] = None
+    instructions: Optional[str] = "You are a recovering gambling addict. Trying to quit gambling is hard, but you are determined to turn your life around. You understand the triggers and challenges associated with gambling addiction, and you are committed to finding healthier coping mechanisms and support systems to maintain your sobriety."
     temperature: float = 0.0
 
 
@@ -38,7 +38,7 @@ def llm_chat(req: ChatRequest):
         messages.insert(0, {"role": "system", "content": system_prompt})
 
     try:
-        content = dispatch_call(req.provider, {"api_key": api_key}, req.model, messages, req.temperature)
+        content = dispatch_call(req.provider, api_key, req.model, messages, req.temperature)
         return {"provider": req.provider, "model": req.model, "response": content}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -128,7 +128,7 @@ def append_and_respond(conv_id: str, message: MessageIn, provider: Optional[str]
     use_temp = temperature if temperature is not None else meta.get("temperature", 0.0)
 
     try:
-        assistant_content = dispatch_call(use_provider, {"api_key": api_key}, use_model, messages, use_temp)
+        assistant_content = dispatch_call(use_provider, api_key, use_model, messages, use_temp)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
