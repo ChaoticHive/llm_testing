@@ -1,0 +1,11 @@
+/voice_to_llm/.env
+/voice_to_llm/__pycache__/
+/voice_to_llm/venv/
+/voice_to_llm/.venv/
+/.venv/
+/examples/
+/output/
+/voice_to_llm/logs/
+/voice_to_llm/node_modules/
+/voice_to_llm/.idea/
+/voice_to_llm/.vscode/
